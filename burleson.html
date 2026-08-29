@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Nexstream Fiber in Burleson County, TX</title>
+<meta name="description" content="BOOT II fiber in Burleson County. Search Caldwell 77836, Somerville 77879, Snook 77878."/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Outfit:wght@400;600&display=swap" rel="stylesheet"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":["LocalBusiness","InternetServiceProvider"],"name":"Nexstream","telephone":"+1-830-990-1118","address":{"@type":"PostalAddress","streetAddress":"415 S Washington St","addressLocality":"Fredericksburg","addressRegion":"TX","postalCode":"78624"},"areaServed":{"@type":"AdministrativeArea","name":"Burleson County, Texas"}}</script>
+<style>
+body{margin:0;font-family:Outfit,sans-serif;background:#faf8f3;color:#14231b}
+.wrap{width:min(1000px,calc(100% - 32px));margin:0 auto;padding:20px}
+h1{font-family:Instrument Serif,serif;font-size:40px;font-weight:400}
+.zips button{margin:4px;padding:8px 12px;border-radius:999px;border:1px solid #ccc;background:#fff}
+#map{height:380px;border-radius:16px;margin-top:16px}
+</style></head>
+<body>
+<div class="wrap">
+<p><a href="index.html">Home</a> · <a href="map.html">Map</a> · <a href="tel:8309901118">830.990.1118</a></p>
+<h1>Burleson County fiber.</h1>
+<p>BOOT II last-mile award. County court approved ROW Phases 2 and 3 in early 2026. Search a ZIP.</p>
+<p class="zips">
+<button data-q="Caldwell, TX 77836">Caldwell 77836</button>
+<button data-q="Somerville, TX 77879">Somerville 77879</button>
+<button data-q="Snook, TX 77878">Snook 77878</button>
+</p>
+<div id="map"></div>
+<p id="out"></p>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const map=L.map('map').setView([30.52,-96.69],10);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18}).addTo(map);
+let marker;
+async function go(q){
+const data=await fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=us&q='+encodeURIComponent(q)).then(r=>r.json());
+if(!data[0])return;
+const h=data[0];
+if(marker)map.removeLayer(marker);
+marker=L.marker([+h.lat,+h.lon]).addTo(map);
+map.setView([+h.lat,+h.lon],13);
+document.getElementById('out').textContent=h.display_name+' — awarded county, confirm the drop.';
+}
+document.querySelectorAll('button').forEach(b=>b.onclick=()=>go(b.dataset.q));
+</script>
+</body></html>
